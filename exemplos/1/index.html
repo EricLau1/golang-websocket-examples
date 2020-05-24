@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golang WebSocket</title>
+</head>
+<body>
+    
+    <script>
+        let ws = new WebSocket('ws://localhost:8080/ws');
+        console.log('Conectando com o WebSocket...');
+
+        ws.onopen = () => {
+            console.log('Conectado com o WebSocket foi aberta.');
+            ws.send('Mensagem do Cliente: Olá WebSocket!');
+        };
+
+        ws.onclose = (event) => {
+            console.log('Conexão com o WebSocket foi fechada. ', event);
+        };
+
+        ws.onmessage = (msg) => {
+            console.log(msg);
+        }
+
+        ws.onerror = (error) => {
+            console.log('WebSocket Error: ', error);
+        }
+    </script>
+
+</body>
+</html>
