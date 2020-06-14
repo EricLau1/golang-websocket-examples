@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket - PubSub</title>
+    <style>
+
+        .status {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
+
+        .status .message {
+            font-size: 18px;
+            margin-left: 5px;
+            text-decoration: underline;
+        }
+
+        .status .color {
+            width: 20px;
+            height: 20px;
+            background: yellow;
+            border-radius: 50%;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="status">
+    <div class="color">
+    </div>
+    <div class="message">
+        Connecting to WebSocket...
+    </div>
+</div>
+<hr />
+<h3>Messages</h3>
+<div class="messages">
+
+</div>
+
+<script type="text/javascript">
+    let ws = new WebSocket('ws://localhost:8080/ws');
+
+    ws.onopen = () => {
+        console.log('WebSocket connected');
+        connected();
+    }
+    ws.onmessage = (msg) => {
+        console.log('WebSocket Message: ', msg.data);
+        setMessages(msg.data);
+    }
+    ws.onerror = (err) => {
+        console.log('WebSocket Error: ', err);
+    }
+    ws.onclose = (evt) => {
+        console.log('WebSocket disconnected', evt);
+        closed();
+    }
+
+    const connected = () => {
+        setStatus('WebSocket Connected', 'green');
+    }
+
+    const closed = () => {
+        setStatus('WebSocket Closed', 'red');
+    };
+
+    const setStatus = (msg, color) => {
+        let statusMsg = document.querySelector(".status .message");
+        let statusColor = document.querySelector(".status .color");
+        statusMsg.innerHTML = msg;
+        statusColor.style.background = color;
+    }
+
+    const setMessages = (text) => {
+        var node = document.createElement("p");
+        var textnode = document.createTextNode(text);
+        node.appendChild(textnode);
+        let messages = document.querySelector(".messages")
+        messages.appendChild(node);
+    }
+</script>
+</body>
+</html>
